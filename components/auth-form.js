@@ -16,7 +16,7 @@ export default function AuthForm({mode}) {
         <input type="email" name="email" id="email" />
       </p>
       <p>
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Contraseña</label>
         <input type="password" name="password" id="password" />
       </p>
       {formState.errors && (
@@ -28,15 +28,15 @@ export default function AuthForm({mode}) {
     )}
       <p>
         <button type="submit">
-          {mode === 'login' ? 'Login' : 'Create Account'}
+          {mode === 'login' ? 'Ingresar' : 'Crear cuenta'}
         </button>
       </p>
       <p>
         {mode === 'login' && (
-          <Link href="/?mode=signup">Create an account.</Link>
+          <Link href="/?mode=signup">Crear cuenta.</Link>
         )}
         {mode === 'signup' && (
-          <Link href="/?mode=login">Login with existing account.</Link>
+          <Link href="/?mode=login">Ingresar con cuenta existente</Link>
         )}
       </p>
     </form>

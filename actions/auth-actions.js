@@ -11,11 +11,11 @@ export async function signup(prevState,formData) {
     let error = {};
 
     if(!email.includes('@')){
-        error.email = 'Please enter a valid email address.';
+        error.email = 'Por favor ingresa un correo valido.';
     }
 
     if( password.trim().length <8){
-        error.password = 'Password must be at least 8 characters long.';
+        error.password = 'Contrasñea demasiado corta.';
     }
 
     if (Object.keys(error).length > 0){
