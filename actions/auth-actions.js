@@ -1,8 +1,8 @@
 'use server';
 import { redirect } from "next/navigation";
-import { createUser } from "@/lib/user";
-import { hashUserPassword } from "@/lib/hash";
-import { createAuthSession } from "@/lib/auth";
+import { createUser, getUserByEmail } from "@/lib/user";
+import { hashUserPassword , verifyPassword} from "@/lib/hash";
+import { createAuthSession, destroySession } from "@/lib/auth";
 
 export async function signup(prevState,formData) {
     const email = formData.get('email');
@@ -36,4 +36,43 @@ export async function signup(prevState,formData) {
         }
         throw error;
     }
+}
+
+export async function login (prevState, formData) {
+    const email = formData.get('email');
+    const password = formData.get('password');
+
+    const existingUser = getUserByEmail(email);
+    if(!existingUser) {
+        return {
+            errors: {
+                email: 'No se pudo encontrar una cuenta con ese correo, por favor revise la credenciales'
+            }
+        }
+    }
+
+    const isValidPassword = verifyPassword(existingUser.password,password);
+
+    if(!isValidPassword) {
+        return {
+            errors: {
+                password: 'La contraseña que has ingresado no es correcta, por favor revisa las credenciales'
+            }
+        }
+    }
+
+    await createAuthSession(existingUser.id);
+    redirect('/training');
+}
+
+export async function auth(mode, prevState, formData) {
+    if(mode === 'login'){
+        return login(prevState, formData);
+    }
+    return signup(prevState, formData);
+}
+
+export async function logout() {
+    await destroySession();
+    redirect('/');
 }
